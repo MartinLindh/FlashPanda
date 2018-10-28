@@ -79,6 +79,7 @@ Development Ideas:
  categorise the questions - source
  create a way for useers to chose categories they like to train.
  Connect to youtube lecturers
+ export the questions to excell-file
 '''
 
 #imports
@@ -86,6 +87,7 @@ Development Ideas:
 import pandas as pd
 import random
 import os
+import sys
 
 def header(msg):
     print('-'* 50)
@@ -96,8 +98,21 @@ def question(msg):
     print('   || '+ msg)
     print('   || \n')
 
-def random_question(questions_df):
+def get_question_number(questions_df):
+    limit_num_question = 1
+
+    #Check if all questions are answered
+    if questions_df['grading'].sum() >= len(questions_df) * limit_num_question:
+        print('All questions have been answered.')
+        shutdown(questions_df)
+
     question_number = random.randint(0, len(questions_df)-1)
+    if questions_df.loc[question_number, 'grading'] >= limit_num_question:
+        question_number = get_question_number(questions_df)
+    return question_number
+
+def random_question(questions_df):
+    question_number = get_question_number(questions_df)
 
     header('Question: ' + str(question_number))
 
@@ -112,6 +127,17 @@ def grade_answer(answer, question_number, questions_df):
 
     if answer.strip() == str(questions_df.loc[question_number,'answer'].strip()):
         print('\nCorrect\n')
+
+        if DEBUG:
+            print(question_number)
+            print(type(question_number))
+
+        grade = questions_df.loc[question_number, 'grading']
+
+
+        if DEBUG:
+            print(grade)
+        questions_df.at[question_number, 'grading'] = grade++1
     else:
         print('The correct answer is: '+ questions_df.loc[question_number,'answer'])
 
@@ -150,6 +176,7 @@ def shutdown(questions_df):
 
     questions_df.to_csv('questions_local.csv',sep = ';',index = False)
     print('-' * 50)
+    sys.exit()
 
 def main():
 
