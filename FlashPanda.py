@@ -63,7 +63,8 @@ df.describe(include=['object'])
 
 Development Ideas:
  Move to a Jupyter notebook X
- Put notebook on Github
+ Put notebook on Github X
+ Read one csv-file, write another
  implement the tracking of questions
 
  set limit on how many times a question can arrise
@@ -104,9 +105,7 @@ def random_question(questions_df):
 
     answer = input('Answer:')
 
-
     return answer, question_number
-
 
 def grade_answer(answer, question_number, questions_df):
     #print(questions_df.loc[question_number,'answer'])
@@ -118,13 +117,26 @@ def grade_answer(answer, question_number, questions_df):
 
     return questions_df
 
-
-
 def startup():
     os.system('cls')
     header('Starting game')
 
-    questions_df = pd.read_csv('questions.csv',';')
+    #Check if DEBUG-mode
+    if DEBUG:
+        print('DEBUG MODE')
+
+    #Loads questions_local.csv if it exist
+    fname1 = 'questions_local.csv'
+    fname2 = 'questions.csv'
+
+
+    if os.path.isfile(fname1):
+        questions_df = pd.read_csv(fname1, ';')
+        if DEBUG:
+            print('opened ',fname1)
+    else:
+        questions_df = pd.read_csv(fname2,';')
+        print('opened ', fname2)
 
     print('Use q to quit')
     print('Code used: \nimport padas as pd')
@@ -136,10 +148,14 @@ def startup():
 def shutdown(questions_df):
     #shutdown procedure
 
-    questions_df.to_csv('questions.csv',sep = ';',index = False)
+    questions_df.to_csv('questions_local.csv',sep = ';',index = False)
     print('-' * 50)
 
 def main():
+
+    global DEBUG
+    DEBUG = True
+
     questions_df = startup()
 
     #Question loop
