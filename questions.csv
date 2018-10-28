@@ -1,0 +1,16 @@
+question;answer;difficulty;grading
+Read the file data.csv into a DataFrame object (df).;df = pd.read_csv('data.csv');2;0
+Display the top part of the DataFrame (df) ;df.head();1;0
+Display the bottom part of a DataFrame (df) ;df.tail();1;0
+Write df[0:2] using the 'loc'-method, explicitly describing that to show all columns ;df.loc[0:2, :];2;0
+Get the version of Pandas that you are using;pd.__version__;1;0
+Print 5 sample rows of a DataFrame (df);df.sample(5);1;0
+Get the data type of the columns of a DataFrame (df);df.dtypes;1;0
+Get the columns of a DataFrame (df);df.columns;1;0
+Get the index of a DataFrame (df);df.index;1;0
+Create a numpy array (A) with the values of a DataFrame (df);A = df.values;2;0
+Write a file (data.csv) with the values from a DataFrame (df);df.to_csv('data.csv');1;0
+Make all the column names into lower case;df.rename(str.lower, axis='columns', inplace=True);1;0
+Append a DataFrame (df1) with the rows of a second DataFrames (df2);pd.concat([df1,df2], axis=0);1;0
+Remove the 'mic'-column from a DataFrame (df);df.drop(column='mic');1;0
+Pandas is often imported with an alias, how is pandas then imported?;import pandas as pd;0;0
